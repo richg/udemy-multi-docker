@@ -3,13 +3,19 @@ services:
   - docker
 
 before_install:
-  - docker build -t richg/react-test -f ./client/Dockerfile.dev ./client
+  - docker build -t richardgrahamza/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run richg/react-test npm test -- --coverage
+  - docker run richardgrahamza/react-test npm test -- --coverage
 
 after_success:
-  - docker build -t richg/fib-client ./client
-  - docker build -t richg/fib-server ./server
-  - docker build -t richg/fib-nginx ./nginx
-  - docker build -t richg/fib-worker ./worker
+  - docker build -t richardgrahamza/fib-client ./client
+  - docker build -t richardgrahamza/fib-server ./server
+  - docker build -t richardgrahamza/fib-nginx ./nginx
+  - docker build -t richardgrahamza/fib-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take these and push to docker hub
+  - docker push richardgrahamza/fib-client
+  - docker push richardgrahamza/fib-server
+  - docker push richardgrahamza/fib-nginx
+  - docker push richardgrahamza/fib-worker
